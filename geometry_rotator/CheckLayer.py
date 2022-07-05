@@ -42,18 +42,20 @@ class CheckLayer:
         try:
             angle = float(str(angle_text))
         except ValueError:
-            QMessageBox.warning(None, "Error", "Input string was incorrect format.")
+            QMessageBox.warning(None, u"Ошибка", u'Входная строка имела некорректный формат')
             return False
 
         layer = iface.activeLayer()
     
         if layer == None:
-            QMessageBox.warning(None, "Error", "No selected layer")
+            QMessageBox.warning(None, u"Ошибка", u'Нет выделено ни одного слоя')
             return False
     
         features = layer.selectedFeatures()
 
         if len(features) == 0:
-            QMessageBox.warning(None, "Error", "No selected features")
+            QMessageBox.warning(None, u"Ошибка", u'В активном слое нет ни одного выделенного объекта')
             return False
     
+        return True
+

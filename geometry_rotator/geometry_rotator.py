@@ -34,6 +34,7 @@ from .geometry_rotator_dialog import GeometryRotatorDialog
 import os.path
 
 from .CheckLayer import CheckLayer
+from .rotation import RotateSelectedLayer
 
 
 class GeometryRotator:
@@ -207,5 +208,7 @@ class GeometryRotator:
             #pass
             # Проверяем условия
             angle_text = self.dlg.angleLineEdit.text()
-            if not CheckLayer.isOK(self.iface, angle_text):
-                return
+            
+            if CheckLayer.isOK(self.iface, angle_text):
+               # Начинаем ворочать
+               RotateSelectedLayer.rotateLayer(self.iface, angle_text)
