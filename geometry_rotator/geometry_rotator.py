@@ -33,6 +33,8 @@ from .resources import *
 from .geometry_rotator_dialog import GeometryRotatorDialog
 import os.path
 
+from .CheckLayer import CheckLayer
+
 
 class GeometryRotator:
     """QGIS Plugin Implementation."""
@@ -202,4 +204,8 @@ class GeometryRotator:
         if result:
             # Do something useful here - delete the line containing pass and
             # substitute with your code.
-            pass
+            #pass
+            # Проверяем условия
+            angle_text = self.dlg.angleLineEdit.text()
+            if not CheckLayer.isOK(self.iface, angle_text):
+                return
