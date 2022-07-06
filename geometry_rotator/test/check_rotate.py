@@ -46,9 +46,7 @@ from .geometry_rotation import (
 from ..rotation import Centroid
 
 class TestFunction(unittest.TestCase):
-    def test_true(self):
-        self.assertEqual(1+1, 2)
     def test_centroid(self):
-        self.assertAlmostEqual(Centroid.getCentroid(1, 1, 3, 3), None)
+        self.assertAlmostEqual(Centroid.getCentroid(1, 1, 3, 3).asWkt(), 'POINT(2 2)')
 if __name__ == '__main__':
     unittest.main()

@@ -57,19 +57,17 @@ class Centroid:
         return cp
 
 # Разворот объектов активного слоя
-class RotateSelectedLayer:
-    
-    
+class RotateSelectedLayer:   
     def rotateLayer(iface, angle_text):
         Xmin = []
         Xmax = []
         Ymin = []
         Ymax = []
-    
+
         angle = float(str(angle_text))
         layer = iface.activeLayer()
         features = layer.selectedFeatures()        
-
+        
         # Присматриваемся к слою
         # Выясняем параметры этого Мирка
         for feature in features:
