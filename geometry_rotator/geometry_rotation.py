@@ -58,10 +58,15 @@ class PointRotation:
 #Класс разворота мультиточек
 class MultiPointRotation:
     # По точечке по точечке и объект повернут
-    def rotateMultiPoint(geom, cp, angle):        
-        for i in range(geom.partCount()):
-            new_part = PointRotation.rotatePoint(geom.parts[i].asPoint(), cp, angle)
-            geom.parts[i] = new_part
+    def rotateMultiPoint(geom, cp, angle):
+        gparts = []
+        for i in range(len(geom)):
+            new_part = PointRotation.rotatePoint(geom[i], cp, angle)
+            geom[i] = new_part.asPoint()
+            gparts.append(new_part.asPoint())
+            
+        # Сборка объекта                
+        return QgsGeometry.fromMultiPointXY(gparts)
 
 # Класс разворота линий
 class LineRotation:
