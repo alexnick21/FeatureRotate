@@ -66,7 +66,10 @@ class LineRotation:
     def rotateLine(geom, cp, angle):
         for i in range(len(geom)):
             new_part = PointRotation.rotatePoint(geom[i], cp, angle)
-            geom[i] = QgsGeometry().fromWkt(new_part.asWkt())
+            p = new_part.asPoint()
+            res_pnt = QgsPoint()
+            res_pnt.fromWkt(p.asWkt())
+            geom[i] = res_pnt
         return geom
     
 class MultiLineRotation:
@@ -76,4 +79,4 @@ class MultiLineRotation:
             new_part = LineRotation.rotateLine(geom[i], cp, angle)
             geom[i] = new_part
             
-        return QgsGeometry.fromPolylineXY(geom)
+        return QgsGeometry.fromPolyline(geom[0])
