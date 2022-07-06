@@ -35,7 +35,14 @@ from qgis.PyQt.QtGui import (
     QColor,
 )
 from qgis.PyQt.QtWidgets import QAction,QMessageBox
-from .geometry_rotation import PointRotation, MultiPointRotation, MultiLineRotation
+from .geometry_rotation import (
+    PointRotation,
+    MultiPointRotation,
+    LineRotation,
+    MultiLineRotation,
+    PolygonRotation,
+    MultiPolygonRotation,
+)
 
 # Разворот объектов активного слоя
 class RotateSelectedLayer:
@@ -116,7 +123,7 @@ class RotateSelectedLayer:
                     obj = geom.asPolyline()
                     QgsMessageLog.logMessage("Line: "+str(geom.asWkt()) + u" длина: " +str( geom.length()),"geometry_rotator")
                     try:
-                        result_geom = LineRotation.rotateMultiPoint(obj, cp, angle)
+                        result_geom = QgsGeometry.FromPolylineXY(LineRotation.rotateMultiPoint(obj, cp, angle))
                         layer.startEditing()
                         layer.changeGeometry(feature.id(), result_geom )
                         layer.commitChanges()
@@ -142,9 +149,29 @@ class RotateSelectedLayer:
                 if geomSingleType:
                     obj = geom.asPolygon()
                     QgsMessageLog.logMessage("Polygon: " + str(geom.asWkt()) + " площадь: " +  str(geom.area()),"geometry_rotator")
+                    try:
+                        result_geom = QgsGeometry.FromPolygonXY(PolygonRotation.rotatePolygon(obj, cp, angle))
+                        layer.startEditing()
+                        layer.changeGeometry(feature.id(), result_geom )
+                        layer.commitChanges()                    
+                    except Exception as e:
+                        QgsMessageLog.logMessage(u"Ошибка разворота объекта: " + str(e),"geometry_rotator")
+                        continue
+
+                    QgsMessageLog.logMessage(u"Поворот завершен успешно.","geometry_rotator")
                 else:
                     obj = geom.asMultiPolygon()
                     QgsMessageLog.logMessage("MultiPolygon: " + str(geom.asWkt()) + " площадь: " + str(geom.area()),"geometry_rotator")
+                    try:
+                        result_geom = MultiPolygonRotation.rotateMultiPolygon(obj, cp, angle)
+                        layer.startEditing()
+                        layer.changeGeometry(feature.id(), result_geom )
+                        layer.commitChanges()                    
+                    except Exception as e:
+                        QgsMessageLog.logMessage(u"Ошибка разворота объекта: " + str(e),"geometry_rotator")
+                        continue
+
+                    QgsMessageLog.logMessage(u"Поворот завершен успешно.","geometry_rotator")
             else:
                 QgsMessageLog.logMessage(u"Нечто непонятное! Его не лечим!","geometry_rotator")
                 continue

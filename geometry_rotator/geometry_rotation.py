@@ -69,9 +69,7 @@ class LineRotation:
         for i in range(len(geom)):
             new_part = PointRotation.rotatePoint(geom[i], cp, angle)
             p = new_part.asPoint()
-            res_pnt = QgsPoint()
-            res_pnt.fromWkt(p.asWkt())
-            geom[i] = res_pnt
+            geom[i] = p
         return geom
 
 # Класс разворота мультилиний    
@@ -83,10 +81,29 @@ class MultiLineRotation:
             geom[i] = new_part
             gparts.append(new_part)            
             
-        # Сборка объекта    
-        result_geom = QgsGeometry.fromPolyline(gparts[0])
-        if len(gparts) > 1:
-            for i in range(1,len(gparts)):
-                result_geom.addPartGeometry(QgsGeometry.fromPolyline(gparts[i]))
+        # Сборка объекта                
+        return QgsGeometry.fromMultiPolylineXY(gparts)
+
+# Класс разворота полигонов
+class PolygonRotation:
+    def rotatePolygon(geom, cp, angle):
+        for i in range(len(geom)):
+            for j in range(len(geom[i])):
+                new_part = PointRotation.rotatePoint(geom[i][j], cp, angle)
+                p = new_part.asPoint()
+                geom[i][j] = p
                 
-        return result_geom
+        return geom
+
+# Класс разворота мультиполигонов    
+class MultiPolygonRotation:
+    def rotateMultiPolygon(geom, cp, angle):
+        gparts = []
+        for i in range(len(geom)):
+            new_part = PolygonRotation.rotatePolygon(geom[i], cp, angle)
+            geom[i] = new_part
+            gparts.append(new_part)            
+            
+        # Сборка объекта                   
+        return QgsGeometry.fromMultiPolygonXY(gparts)
+
