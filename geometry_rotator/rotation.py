@@ -44,8 +44,22 @@ from .geometry_rotation import (
     MultiPolygonRotation,
 )
 
+class Centroid:
+    def getCentroid(Xmin, Ymin, Xmax, Ymax):
+        # Приготовим конверт
+        gPolygon = QgsGeometry.fromPolygonXY([[QgsPointXY(Xmin, Ymin),
+                                               QgsPointXY(Xmin, Ymax),
+                                               QgsPointXY(Xmax, Ymax),
+                                               QgsPointXY(Xmax, Ymin),
+                                               QgsPointXY(Xmin, Ymin)]])
+        # Вожделенный центр
+        cp = gPolygon.centroid().asPoint()
+        return cp
+
 # Разворот объектов активного слоя
 class RotateSelectedLayer:
+    
+    
     def rotateLayer(iface, angle_text):
         Xmin = []
         Xmax = []
@@ -72,14 +86,7 @@ class RotateSelectedLayer:
             Ymax.append(ext.yMaximum())
         
         # Выясняем где центр Мирка избранных объектов
-        # Приготовим конверт
-        gPolygon = QgsGeometry.fromPolygonXY([[QgsPointXY(min(Xmin), min(Ymin)),
-                                               QgsPointXY(min(Xmin), max(Ymax)),
-                                               QgsPointXY(max(Xmax), max(Ymax)),
-                                               QgsPointXY(max(Xmin), min(Ymin)),
-                                               QgsPointXY(min(Xmin), min(Ymin))]])
-        # Вожделенный центр
-        cp = gPolygon.centroid().asPoint()
+        cp = Centroid.getCentroid(min(Xmin), min(Ymin), max(Xmax), max(Ymax))        
 
         # Теперь начинаем все это дербанить по-взрослому
         # К геометрии подход индивидуальный в зависимости от типа
