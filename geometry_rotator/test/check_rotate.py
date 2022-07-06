@@ -1,4 +1,7 @@
 import unittest
+import sys
+sys.path.append('../')
+
 from qgis.core import (
   QgsApplication,
   QgsDataSourceUri,
@@ -43,10 +46,11 @@ from .geometry_rotation import (
     PolygonRotation,
     MultiPolygonRotation,
 )
-from ..rotation import Centroid
+
+import rotation
 
 class TestFunction(unittest.TestCase):
     def test_centroid(self):
-        self.assertAlmostEqual(Centroid.getCentroid(1, 1, 3, 3).asWkt(), 'POINT(2 2)')
+        self.assertAlmostEqual(rotation.Centroid.getCentroid(1, 1, 3, 3).asWkt(), 'POINT(2 2)')
 if __name__ == '__main__':
     unittest.main()
