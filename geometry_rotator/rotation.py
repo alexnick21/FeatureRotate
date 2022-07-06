@@ -115,14 +115,14 @@ class RotateSelectedLayer:
                 if geomSingleType:
                     obj = geom.asPolyline()
                     QgsMessageLog.logMessage("Line: "+str(geom.asWkt()) + u" длина: " +str( geom.length()),"geometry_rotator")
-##                    try:
-##                        result_geom = LineRotation.rotateMultiPoint(obj, cp, angle)
-##                    layer.startEditing()
-##                        layer.changeGeometry(feature.id(), result_geom )
-##                        layer.commitChanges()
-##                    except Exception as e:
-##                        QgsMessageLog.logMessage(u"Ошибка разворота объекта: " + str(e),"geometry_rotator")
-##                        continue
+                    try:
+                        result_geom = LineRotation.rotateMultiPoint(obj, cp, angle)
+                        layer.startEditing()
+                        layer.changeGeometry(feature.id(), result_geom )
+                        layer.commitChanges()
+                    except Exception as e:
+                        QgsMessageLog.logMessage(u"Ошибка разворота объекта: " + str(e),"geometry_rotator")
+                        continue
                     
                     QgsMessageLog.logMessage(u"Поворот завершен успешно.","geometry_rotator")
                 else:
@@ -136,6 +136,8 @@ class RotateSelectedLayer:
                     except Exception as e:
                         QgsMessageLog.logMessage(u"Ошибка разворота объекта: " + str(e),"geometry_rotator")
                         continue
+
+                    QgsMessageLog.logMessage(u"Поворот завершен успешно.","geometry_rotator")
             elif geom.type() == QgsWkbTypes.PolygonGeometry:
                 if geomSingleType:
                     obj = geom.asPolygon()

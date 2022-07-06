@@ -27,6 +27,7 @@ from qgis.core import (
   QgsSpatialIndex,
   QgsVectorLayerUtils,
   QgsPoint,
+  QgsMultiLineString
 )
 
 from qgis.core.additions.edit import edit
@@ -62,6 +63,7 @@ class MultiPointRotation:
             new_part = PointRotation.rotatePoint(geom.parts[i].asPoint(), cp, angle)
             geom.parts[i] = new_part
 
+# Класс разворота линий
 class LineRotation:
     def rotateLine(geom, cp, angle):
         for i in range(len(geom)):
@@ -71,12 +73,20 @@ class LineRotation:
             res_pnt.fromWkt(p.asWkt())
             geom[i] = res_pnt
         return geom
-    
+
+# Класс разворота мультилиний    
 class MultiLineRotation:
     def rotateMultiLine(geom, cp, angle):
+        gparts = []
         for i in range(len(geom)):
-            print (geom[i])
             new_part = LineRotation.rotateLine(geom[i], cp, angle)
             geom[i] = new_part
+            gparts.append(new_part)            
             
-        return QgsGeometry.fromPolyline(geom[0])
+        # Сборка объекта    
+        result_geom = QgsGeometry.fromPolyline(gparts[0])
+        if len(gparts) > 1:
+            for i in range(1,len(gparts)):
+                result_geom.addPartGeometry(QgsGeometry.fromPolyline(gparts[i]))
+                
+        return result_geom
