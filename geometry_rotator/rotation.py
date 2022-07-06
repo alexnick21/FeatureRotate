@@ -76,6 +76,7 @@ class RotateSelectedLayer:
         gPolygon = QgsGeometry.fromPolygonXY([[QgsPointXY(min(Xmin), min(Ymin)),
                                                QgsPointXY(min(Xmin), max(Ymax)),
                                                QgsPointXY(max(Xmax), max(Ymax)),
+                                               QgsPointXY(max(Xmin), min(Ymin)),
                                                QgsPointXY(min(Xmin), min(Ymin))]])
         # Вожделенный центр
         cp = gPolygon.centroid().asPoint()
